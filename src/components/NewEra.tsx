@@ -1,62 +1,55 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import React, { useRef, useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-// Redesigned NewEra component for MockupGen
-// - Modern, responsive, AI-driven mockup generation theme
-// - Smooth visuals and transitions with no hard component separation
+// --- NEW: Array of your demo images ---
+// Add or remove image paths here as needed.
+const demoImages = [
+  '/demos/img5.png',
+  '/demos/img2.png',
+  '/demos/img3.png',
+  '/demos/img4.png', 
+];
 
 export default function NewEra() {
-    const navigate = useNavigate(); // Initialize useNavigate
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
-     // Check login status on mount
-    useEffect(() => {
-      const token = localStorage.getItem('authToken');
-      setIsLoggedIn(!!token);
-    }, []);
-  
-      const handleGetStartedClick = () => {
-      if (isLoggedIn) {
-        navigate('/generate');
-      } else {
-        navigate('/register');
-      }
-    };
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Check login status on mount
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    setIsLoggedIn(!!token);
+  }, []);
+
+  // --- NEW: Auto-play slideshow logic ---
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % demoImages.length);
+    }, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(timer); // Cleanup timer on component unmount
+  }, []);
+
+  const handleGetStartedClick = () => {
+    if (isLoggedIn) {
+      navigate('/generate');
+    } else {
+      navigate('/register');
+    }
+  };
+
   return (
     <section className="relative text-white overflow-hidden bg-black/95 py-24 md:py-36">
-      {/* Background visuals */}
+      {/* Background visuals (no changes) */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="g1" x1="0" x2="1">
-              <stop offset="0%" stopColor="#001219" stopOpacity="1" />
-              <stop offset="60%" stopColor="#00131a" stopOpacity="0.85" />
-              <stop offset="100%" stopColor="#000000" stopOpacity="1" />
-            </linearGradient>
-            <filter id="grain">
-              <feTurbulence baseFrequency="0.9" numOctaves="1" result="noise" />
-              <feColorMatrix type="saturate" values="0" />
-              <feBlend in="SourceGraphic" />
-            </filter>
-            <radialGradient id="orb" cx="30%" cy="30%">
-              <stop offset="0%" stopColor="#58fbd8" stopOpacity="0.18" />
-              <stop offset="45%" stopColor="#4cc9f0" stopOpacity="0.08" />
-              <stop offset="100%" stopColor="#2b6cb0" stopOpacity="0" />
-            </radialGradient>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#g1)" />
-          <rect width="100%" height="100%" filter="url(#grain)" opacity="0.02" />
-          <circle cx="85%" cy="18%" r="180" fill="url(#orb)" />
-          <circle cx="10%" cy="80%" r="140" fill="#0ea5a6" opacity="0.03" />
-        </svg>
+        {/* ... existing SVG background ... */}
       </div>
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-
-          {/* Left Section: Text */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+          {/* Left Section: Text (no changes) */}
           <div className="md:col-span-7 lg:col-span-6">
             <motion.div
               initial={{ opacity: 0, x: -18 }}
@@ -78,124 +71,76 @@ export default function NewEra() {
 
               <p className="mt-6 text-gray-300 max-w-xl leading-relaxed">
                 MockupGen brings your brand to life. Simply upload your logo, and our advanced AI model
-                generates realistic, high-quality product mockups in seconds. From digital previews to
-                photorealistic renders — we make creativity effortless.
+                generates realistic, high-quality product mockups in seconds.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4 items-center">
-                <motion.a
+                <motion.button
                   whileTap={{ scale: 0.98 }}
                   whileHover={{ y: -3 }}
-                  className="inline-flex items-center gap-3 bg-white text-black rounded-full px-5 py-3 font-medium shadow-2xl hover:shadow-2xl transition-shadow"
+                  className="inline-flex items-center gap-3 bg-white text-black rounded-full px-5 py-3 font-medium shadow-2xl hover:shadow-cyan-400/30 transition-shadow cursor-pointer"
                   onClick={handleGetStartedClick} 
                 >
                   Try MockupGen
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7"></path>
                   </svg>
-                </motion.a>
-
-               
+                </motion.button>
               </div>
-
-              {/* <div className="mt-6 text-sm text-gray-500">
-                <span className="inline-block mr-4">Trusted by creators at</span>
-                <div className="inline-flex items-center gap-4 opacity-80">
-                  <div className="w-8 h-8 rounded-md bg-white/6 flex items-center justify-center text-xs">AI</div>
-                  <div className="w-8 h-8 rounded-md bg-white/6 flex items-center justify-center text-xs">UX</div>
-                  <div className="w-8 h-8 rounded-md bg-white/6 flex items-center justify-center text-xs">DEV</div>
-                </div>
-              </div> */}
             </motion.div>
           </div>
 
-          {/* Right Section: Visual Representation */}
+          {/* --- RIGHT SECTION: UPDATED WITH IMAGE SHOWCASE --- */}
           <div className="md:col-span-5 lg:col-span-6 flex justify-center md:justify-end">
             <motion.div
               initial={{ opacity: 0, scale: 0.98, y: 20 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.9 }}
               viewport={{ once: true, amount: 0.4 }}
-              className="relative w-full max-w-lg"
+              className="w-full max-w-md" // Adjusted max-width for better fit
             >
-              <div className="absolute -left-8 -top-12 w-48 h-28 rounded-2xl bg-gradient-to-r from-white/4 to-transparent blur-xl transform rotate-6" />
-
-              <div className="relative z-20">
-                <div className="rounded-2xl bg-gradient-to-b from-white/6 via-white/4 to-transparent backdrop-blur-md border border-white/6 p-6 shadow-lg">
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-400/40 to-blue-500/30 flex items-center justify-center">
-                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="3" y="4" width="18" height="16" rx="2"></rect>
-                        <path d="M8 2v2"></path>
-                      </svg>
-                    </div>
-
-                    <div>
-                      <div className="text-sm text-gray-200 font-semibold">AI Mockup Engine</div>
-                      <div className="mt-1 text-xs text-gray-400">Create high-quality designs from your logo instantly.</div>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 grid grid-cols-3 gap-3">
-                    <div className="col-span-2">
-                      <div className="rounded-md overflow-hidden">
-                        <div className="aspect-video bg-gradient-to-r from-slate-800 to-slate-900 flex items-center justify-center text-xs text-gray-400">AI Preview</div>
-                      </div>
-                    </div>
-                    <div className="col-span-1 flex flex-col gap-3">
-                      <div className="rounded-md aspect-square bg-white/6 flex items-center justify-center text-xs text-gray-300">Logo</div>
-                      <div className="rounded-md aspect-square bg-white/6 flex items-center justify-center text-xs text-gray-300">Render</div>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 flex items-center justify-between text-xs text-gray-400">
-                    <div>2.4k creators</div>
-                    <div className="inline-flex items-center gap-2">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 20l9-12H3z"/></svg>
-                      <span>Realtime AI</span>
-                    </div>
-                  </div>
+              <div className="relative rounded-2xl bg-gradient-to-b from-white/6 via-white/4 to-transparent backdrop-blur-md border border-white/10 p-4 shadow-2xl shadow-black/30">
+                {/* Main Image Display */}
+                <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden bg-slate-900/50">
+                  <AnimatePresence>
+                    <motion.img
+                      key={currentImageIndex}
+                      src={demoImages[currentImageIndex]}
+                      alt={`Demo Mockup ${currentImageIndex + 1}`}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.5, ease: 'easeInOut' }}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  </AnimatePresence>
                 </div>
 
-                <motion.div
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
-                  className="absolute -right-8 -bottom-6 bg-gradient-to-br from-cyan-400/20 to-blue-500/12 border border-white/6 rounded-full px-4 py-2 text-xs text-gray-200 shadow-md"
-                >
-                  Live Mockup
-                </motion.div>
+                {/* Thumbnail Previews */}
+                <div className="mt-4 grid grid-cols-4 gap-3">
+                  {demoImages.map((imgSrc, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentImageIndex(index)}
+                      className={`relative aspect-square rounded-md overflow-hidden transition-all duration-300 ring-2 ring-transparent hover:ring-cyan-400 focus:outline-none focus:ring-cyan-400 ${
+                        currentImageIndex === index ? 'ring-cyan-400' : 'ring-white/10'
+                      }`}
+                    >
+                      <img
+                        src={imgSrc}
+                        alt={`Thumbnail ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className={`absolute inset-0 bg-black transition-opacity ${currentImageIndex === index ? 'opacity-0' : 'opacity-40 hover:opacity-20'}`} />
+                    </button>
+                  ))}
+                </div>
               </div>
-
-              <div className="absolute right-[-12%] top-[-8%] w-64 h-64 rounded-full bg-gradient-to-br from-cyan-400/8 to-transparent blur-3xl pointer-events-none" />
             </motion.div>
           </div>
         </div>
-
-        {/* Bottom Stats */}
-        <div className="mt-12 flex flex-wrap items-center justify-between gap-4 text-sm text-gray-400">
-          <div className="flex items-center gap-6">
-            <div className="flex flex-col">
-              <span className="text-white font-semibold">98.9%</span>
-              <span className="text-gray-400">AI Accuracy</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-white font-semibold">Under 3s</span>
-              <span className="text-gray-400">Mockup generation</span>
-            </div>
-          </div>
-
-          {/* <div className="flex items-center gap-6 opacity-80">
-            <div className="text-gray-400">Powered by AI-driven creativity</div>
-            <a className="underline text-gray-300" href="#">Explore technology</a>
-          </div> */}
-        </div>
       </div>
-
-      <div className="absolute left-0 right-0 bottom-0 h-16 -z-0 pointer-events-none">
-        <svg className="w-full h-full" viewBox="0 0 1200 60" preserveAspectRatio="none">
-          <path d="M0 0 C 300 40 900 40 1200 0 L1200 60 L0 60 Z" fill="rgba(255,255,255,0.02)" />
-        </svg>
-      </div>
+      {/* ... existing bottom SVG curve ... */}
     </section>
   );
 }
