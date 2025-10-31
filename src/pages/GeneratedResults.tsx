@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react"; 
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, RefreshCcw, Download, Share2, X } from "lucide-react";
@@ -13,6 +13,8 @@ const GeneratedResults: React.FC = () => {
   const [images, setImages] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [previewImg, setPreviewImg] = useState<string | null>(null);
+
+  const generationStarted = useRef(false);
 
   const runGeneration = useCallback(async () => {
     if (!prompt || !logo) {
@@ -49,10 +51,15 @@ const GeneratedResults: React.FC = () => {
     }
   }, [prompt, logo, navigate]);
 
-  useEffect(() => {
-    runGeneration();
+   useEffect(() => {
+    // ✅ SOLUTION: Check the ref. If generation has already run, do nothing.
+    // If not, run it and set the ref to true.
+    if (!generationStarted.current) {
+      generationStarted.current = true;
+      runGeneration();
+    }
   }, [runGeneration]);
-
+  
   const handleRegenerate = () => runGeneration();
   const handleNewMockup = () => navigate("/generate");
 
