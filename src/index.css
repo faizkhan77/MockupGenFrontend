@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .bg-radial-aura {
+    background-image: radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.9) 0%,       /* bright white center */
+      rgba(180, 255, 255, 0.8) 20%,      /* light cyan transition */
+      rgba(0, 240, 255, 0.6) 40%,        /* bright cyan */
+      rgba(0, 160, 255, 0.4) 60%,        /* rich blue */
+      rgba(0, 80, 255, 0.2) 80%,         /* deeper blue edge */
+      transparent 100%                   /* fade out smoothly */
+    );
+  }
+}
+
+
+
+
+
+/* Animated border for the prompt box */
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.animated-border-box {
+  --border-size: 2px;
+  --angle: 0deg;
+  
+  background-image:
+    conic-gradient(from var(--angle), transparent 20%, #00ffff, #ffffff, #00ffff, transparent 80%),
+    linear-gradient(to right, #1E1E22, #1E1E22); /* This should match your inner box background */
+  
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  animation: a-spin 10s linear infinite;
+}
+
+@keyframes a-spin {
+  to {
+    --angle: 360deg;
+  }
+}
