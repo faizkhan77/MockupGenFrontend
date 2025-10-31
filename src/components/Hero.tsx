@@ -1,7 +1,8 @@
 'use client';
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect,useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useNavigate } from 'react-router-dom';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -9,6 +10,23 @@ const Hero: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const orbRefs = useRef<(HTMLImageElement | null)[]>([]);
   const circleRef = useRef<HTMLImageElement | null>(null);
+
+  const navigate = useNavigate(); // Initialize useNavigate
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+   // Check login status on mount
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    setIsLoggedIn(!!token);
+  }, []);
+
+    const handleGetStartedClick = () => {
+    if (isLoggedIn) {
+      navigate('/generate');
+    } else {
+      navigate('/register');
+    }
+  };
 
   useEffect(() => {
     // Entrance animation for orbs
@@ -119,7 +137,10 @@ const Hero: React.FC = () => {
         <p className="text-gray-300 mt-6 max-w-lg sm:max-w-xl text-base sm:text-lg md:text-xl font-medium leading-relaxed">
           Generate advanced, high-quality mockups instantly from your logo, powered by state-of-the-art AI model that understands design aesthetics like a pro.
         </p>
-        <button className="mt-10 bg-cyan-500 text-white font-semibold py-3 px-10 rounded-full hover:bg-white hover:text-black transition-all duration-300 shadow-lg shadow-cyan-500/30">
+        <button 
+          onClick={handleGetStartedClick}
+          className="mt-10 bg-cyan-500 text-white font-semibold py-3 px-10 rounded-full hover:bg-white hover:text-black transition-all duration-300 shadow-lg shadow-cyan-500/30"
+        >
           Get Started
         </button>
       </div>

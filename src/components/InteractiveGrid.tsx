@@ -1,11 +1,28 @@
-import React from 'react';
-import { useRef, useEffect } from 'react';
+import React, { useRef, useEffect,useState } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
+import { useNavigate } from 'react-router-dom';
 
 const InteractiveGrid: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
+
+    const navigate = useNavigate(); // Initialize useNavigate
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+   // Check login status on mount
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    setIsLoggedIn(!!token);
+  }, []);
+
+    const handleGetStartedClick = () => {
+    if (isLoggedIn) {
+      navigate('/generate');
+    } else {
+      navigate('/register');
+    }
+  };
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -65,7 +82,7 @@ const InteractiveGrid: React.FC = () => {
           <p className="text-gray-400 max-w-lg">
             Your brand is more than just a logo. It's an identity. With MockupGen, you can instantly visualize your assets across a universe of applications—from digital storefronts and social media profiles to Web3 collectibles and community assets. Curate your public image and build a powerful, cohesive brand presence.
           </p>
-          <button className="mt-8 bg-cyan-500 text-black font-bold py-3 px-6 rounded-full hover:bg-cyan-400 transition-transform hover:scale-105">
+          <button onClick={handleGetStartedClick} className="mt-8 bg-cyan-500 text-black font-bold py-3 px-6 rounded-full hover:bg-cyan-400 transition-transform hover:scale-105">
             Build Your Digital Identity
           </button>
         </motion.div>

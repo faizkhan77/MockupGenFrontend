@@ -1,11 +1,28 @@
-import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import React, { useRef, useEffect,useState } from 'react';
 
 // Redesigned NewEra component for MockupGen
 // - Modern, responsive, AI-driven mockup generation theme
 // - Smooth visuals and transitions with no hard component separation
 
 export default function NewEra() {
+    const navigate = useNavigate(); // Initialize useNavigate
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+     // Check login status on mount
+    useEffect(() => {
+      const token = localStorage.getItem('authToken');
+      setIsLoggedIn(!!token);
+    }, []);
+  
+      const handleGetStartedClick = () => {
+      if (isLoggedIn) {
+        navigate('/generate');
+      } else {
+        navigate('/register');
+      }
+    };
   return (
     <section className="relative text-white overflow-hidden bg-black/95 py-24 md:py-36">
       {/* Background visuals */}
@@ -70,7 +87,7 @@ export default function NewEra() {
                   whileTap={{ scale: 0.98 }}
                   whileHover={{ y: -3 }}
                   className="inline-flex items-center gap-3 bg-white text-black rounded-full px-5 py-3 font-medium shadow-2xl hover:shadow-2xl transition-shadow"
-                  href="#"
+                  onClick={handleGetStartedClick} 
                 >
                   Try MockupGen
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

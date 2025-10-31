@@ -1,9 +1,37 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'; // Import Link for client-side routing
 import { motion } from 'framer-motion';
 import { Instagram, Linkedin } from 'lucide-react';
 
 const Footer: React.FC = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check login status on component mount
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    setIsLoggedIn(!!token);
+  }, []);
+
+  // Define navigation links based on login state
+  const loggedOutLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'Pricing', path: '/pricing' },
+    { name: 'Demo', path: '/demo' },
+    { name: 'Register', path: '/register' },
+    { name: 'Login', path: '/login' },
+  ];
+
+  const loggedInLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'Generate', path: '/generate' },
+    { name: 'Pricing', path: '/pricing' },
+    { name: 'Demo', path: '/demo' },
+    { name: 'My Mockups', path: '/my-mockups' },
+  ];
+  
+  const navLinks = isLoggedIn ? loggedInLinks : loggedOutLinks;
+
   return (
     <footer className="relative overflow-hidden bg-gradient-to-b from-[#030712] via-[#050b18] to-black text-white border-t border-white/10">
       {/* Animated background gradients */}
@@ -47,26 +75,14 @@ const Footer: React.FC = () => {
               Explore
             </h4>
             <ul className="space-y-2 text-gray-400">
-              <li>
-                <a href="/" className="hover:text-cyan-400 transition-all duration-200 hover:translate-x-1 inline-block">
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="/generate" className="hover:text-cyan-400 transition-all duration-200 hover:translate-x-1 inline-block">
-                  Generator
-                </a>
-              </li>
-              <li>
-                <a href="/register" className="hover:text-cyan-400 transition-all duration-200 hover:translate-x-1 inline-block">
-                  Register
-                </a>
-              </li>
-              <li>
-                <a href="/login" className="hover:text-cyan-400 transition-all duration-200 hover:translate-x-1 inline-block">
-                  Login
-                </a>
-              </li>
+              {/* --- DYNAMIC NAVIGATION LINKS --- */}
+              {navLinks.map((link) => (
+                <li key={link.name}>
+                  <Link to={link.path} className="hover:text-cyan-400 transition-all duration-200 hover:translate-x-1 inline-block">
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </motion.div>
 
@@ -81,8 +97,9 @@ const Footer: React.FC = () => {
             <h4 className="text-lg font-semibold text-white mb-4 uppercase tracking-wide">
               Connect
             </h4>
+            {/* --- UPDATED CAREERS LINK --- */}
             <a
-              href="https://brainfog.com"
+              href="https://careers.brainfogagency.com/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-cyan-400 font-medium hover:text-cyan-300 transition-colors duration-200"
@@ -90,8 +107,11 @@ const Footer: React.FC = () => {
               Careers @ Brainfog
             </a>
             <div className="flex justify-center md:justify-end space-x-5 mt-4">
+              {/* --- UPDATED SOCIAL LINKS --- */}
               <motion.a
-                href="https://instagram.com/brainfog"
+                href="https://www.instagram.com/brainfog_agency/"
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.15, rotate: 5 }}
                 transition={{ type: 'spring', stiffness: 300 }}
                 className="text-gray-400 hover:text-white"
@@ -99,7 +119,9 @@ const Footer: React.FC = () => {
                 <Instagram size={22} />
               </motion.a>
               <motion.a
-                href="https://linkedin.com/company/brainfog"
+                href="https://www.linkedin.com/company/brainfogagency/"
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.15, rotate: -5 }}
                 transition={{ type: 'spring', stiffness: 300 }}
                 className="text-gray-400 hover:text-white"
@@ -125,8 +147,9 @@ const Footer: React.FC = () => {
             <p>© {new Date().getFullYear()} MockupGen. All rights reserved.</p>
             <p className="mt-1">
               Crafted with ❤️ by{" "}
+              {/* --- UPDATED BRAINFOG WEBSITE LINK --- */}
               <a
-                href="https://brainfog.com"
+                href="https://brainfogagency.com/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline hover:text-cyan-400"
@@ -136,15 +159,16 @@ const Footer: React.FC = () => {
             </p>
           </div>
           <div className="flex space-x-5">
-            <a href="/cookies" className="hover:text-white transition-colors">
+            {/* --- USE LINK FOR INTERNAL PAGES --- */}
+            <Link to="/cookies" className="hover:text-white transition-colors">
               Cookies
-            </a>
-            <a href="/terms" className="hover:text-white transition-colors">
+            </Link>
+            <Link to="/terms" className="hover:text-white transition-colors">
               Terms
-            </a>
-            <a href="/privacy" className="hover:text-white transition-colors">
+            </Link>
+            <Link to="/privacy" className="hover:text-white transition-colors">
               Privacy
-            </a>
+            </Link>
           </div>
         </motion.div>
       </div>

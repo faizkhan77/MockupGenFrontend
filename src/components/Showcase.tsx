@@ -1,8 +1,26 @@
-import React, { useRef, useEffect } from 'react';
+
 import gsap from 'gsap';
+import React, { useRef, useEffect,useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Showcase: React.FC = () => {
   const imageRef = useRef<HTMLImageElement>(null);
+    const navigate = useNavigate(); // Initialize useNavigate
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+   // Check login status on mount
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    setIsLoggedIn(!!token);
+  }, []);
+
+    const handleGetStartedClick = () => {
+    if (isLoggedIn) {
+      navigate('/generate');
+    } else {
+      navigate('/register');
+    }
+  };
 
   // Use useEffect to run the animation code once the component mounts
   useEffect(() => {
@@ -30,7 +48,7 @@ const Showcase: React.FC = () => {
           <p className="text-gray-400 max-w-lg">
             Welcome to MockupGen. Transform your brand's logo into stunning, professional mockups in seconds. Our advanced AI analyzes your design to generate unique, photorealistic scenes on a variety of products, giving you the perfect visuals for your marketing campaigns.
           </p>
-          <button className="mt-8 bg-white text-black font-semibold py-3 px-6 rounded-full hover:bg-gray-200 transition-colors">
+          <button onClick={handleGetStartedClick} className="mt-8 bg-white text-black font-semibold py-3 px-6 rounded-full hover:bg-gray-200 transition-colors">
             Try The Generator
           </button>
         </div>
