@@ -17,6 +17,17 @@ const GeneratedResults: React.FC = () => {
   const generationStarted = useRef(false);
 
   const runGeneration = useCallback(async () => {
+
+    // 🔽 ADD THIS BLOCK TO CHECK FOR TOKEN 🔽
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        alert("You must be logged in to generate mockups.");
+        navigate('/login');
+        return;
+    }
+    // 🔼 END OF ADDED BLOCK 🔼
+
+
     if (!prompt || !logo) {
       navigate("/generate");
       return;
@@ -35,6 +46,10 @@ const GeneratedResults: React.FC = () => {
 
       const res = await fetch("http://127.0.0.1:8000/api/generate-mockups", {
         method: "POST",
+        // 🔽 ADD THIS HEADERS OBJECT 🔽
+        headers: {
+            'Authorization': `Bearer ${token}`
+        },
         body: formData,
       });
 

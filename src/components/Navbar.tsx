@@ -21,7 +21,7 @@ const Navbar: React.FC = () => {
         {/* Centered Navigation (Desktop) */}
         <nav className="hidden md:block absolute left-1/2 -translate-x-1/2">
           <ul className="flex items-center bg-[#22252A]/70 backdrop-blur-lg p-2 rounded-full ring-1 ring-white/10">
-            {["Home", "Generate", "Register", "Login"].map((item, idx) => (
+            {["Home", "Generate", "Register", "Login","my-mockups"].map((item, idx) => (
               <li key={idx}>
                 <NavLink
                   to={`/${item.toLowerCase() === "home" ? "" : item.toLowerCase()}`}

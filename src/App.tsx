@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import GeneratorPage from './pages/GeneratorPage';
 import GeneratedResults from "./pages/GeneratedResults";
+import MyMockupsPage from './pages/MyMockupsPage';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/generate" element={<GeneratorPage />} />
       <Route path="/results" element={<GeneratedResults />} />
+      <Route path="/my-mockups" element={<MyMockupsPage />} />
     </Routes>
   );
 }
